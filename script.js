@@ -226,27 +226,8 @@ window.addEventListener('scroll', () => {
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 });
 
-// Support button interactions
-document.addEventListener('DOMContentLoaded', () => {
-    const revolutBtn = document.getElementById('revolut-btn');
-    const donationBtn = document.getElementById('donation-btn');
-    
-    if (revolutBtn) {
-        revolutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            // You can replace this with actual Revolut link
-            alert('Revolut tag: @your-tag\n\nThank you for considering a donation!');
-        });
-    }
-    
-    if (donationBtn) {
-        donationBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            // You can replace this with actual donation platform link
-            alert('Donation platform coming soon!\n\nThank you for your interest in supporting this service!');
-        });
-    }
-});
+// Support button interactions - now handled by direct links with target="_blank"
+// Buttons will open Revolut and Ko-Fi links in new tabs
 
 // Form field enhancements
 document.addEventListener('DOMContentLoaded', () => {
