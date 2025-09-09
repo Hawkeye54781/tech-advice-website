@@ -31,6 +31,19 @@ if (navToggle && navMenu) {
     });
 }
 
+// EmailJS Configuration
+// Replace these with your actual EmailJS credentials after setup
+const EMAILJS_CONFIG = {
+    PUBLIC_KEY: 'YOUR_PUBLIC_KEY', // Replace with your EmailJS public key
+    SERVICE_ID: 'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
+    TEMPLATE_ID: 'YOUR_TEMPLATE_ID' // Replace with your EmailJS template ID
+};
+
+// Initialize EmailJS
+if (typeof emailjs !== 'undefined') {
+    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+}
+
 // Form handling
 const contactForm = document.getElementById('contactForm');
 const formStatus = document.getElementById('formStatus');
@@ -55,23 +68,63 @@ if (contactForm) {
         submitBtn.disabled = true;
         submitBtn.classList.add('loading');
         
-        // Simulate form submission (replace with actual form handling)
-        setTimeout(() => {
-            // Reset button
+        // Check if EmailJS is configured
+        if (EMAILJS_CONFIG.PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
+            // Show configuration message if not set up yet
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+                
+                showFormStatus('error', '⚙️ EmailJS not configured yet. Please check the setup instructions in the console.');
+                console.log('%c📧 EmailJS Setup Required!', 'color: #f59e0b; font-size: 16px; font-weight: bold;');
+                console.log('Please follow these steps to enable email sending:');
+                console.log('1. Go to https://www.emailjs.com/ and create a free account');
+                console.log('2. Set up an email service (Gmail, Outlook, etc.)');
+                console.log('3. Create an email template');
+                console.log('4. Replace the credentials in script.js');
+                console.log('5. Form data would be:', data);
+            }, 1000);
+            return;
+        }
+        
+        // Send email using EmailJS
+        emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
+            from_name: data.name,
+            from_email: data.email,
+            category: data.category,
+            budget: data.budget || 'Not specified',
+            timeline: data.timeline || 'Not specified',
+            message: data.message,
+            to_name: 'Tech Advice Hub', // Your name
+        })
+        .then(() => {
+            // Success
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
             submitBtn.classList.remove('loading');
             
-            // Show success message
-            showFormStatus('success', 'Thank you for your message! I\'ll get back to you within 24 hours with personalized tech advice.');
+            showFormStatus('success', '✅ Thank you for your message! I\'ll get back to you within 24 hours with personalized tech advice.');
             
             // Reset form
-            this.reset();
+            contactForm.reset();
             
-            // In a real implementation, you would send the data to your server
-            console.log('Form data:', data);
+            // Update character counter
+            const charCounter = document.querySelector('.char-counter');
+            if (charCounter) {
+                charCounter.textContent = '0 characters (minimum 20)';
+                charCounter.style.color = 'var(--error)';
+            }
+        })
+        .catch((error) => {
+            // Error
+            console.error('EmailJS Error:', error);
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('loading');
             
-        }, 2000);
+            showFormStatus('error', '❌ Sorry, there was an error sending your message. Please try again or contact me directly.');
+        });
     });
 }
 
