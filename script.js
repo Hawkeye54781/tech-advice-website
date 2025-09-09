@@ -34,9 +34,9 @@ if (navToggle && navMenu) {
 // EmailJS Configuration
 // Replace these with your actual EmailJS credentials after setup
 const EMAILJS_CONFIG = {
-    PUBLIC_KEY: 'YOUR_PUBLIC_KEY', // Replace with your EmailJS public key
-    SERVICE_ID: 'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-    TEMPLATE_ID: 'YOUR_TEMPLATE_ID' // Replace with your EmailJS template ID
+    PUBLIC_KEY: 'AVuWOQKvUIrIRu3a0', // Replace with your EmailJS public key
+    SERVICE_ID: 'service_731y3db', // Replace with your EmailJS service ID
+    TEMPLATE_ID: 'template_drvh67x' // Replace with your EmailJS template ID
 };
 
 // Initialize EmailJS
